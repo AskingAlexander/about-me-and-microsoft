@@ -1,0 +1,82 @@
+﻿@using Showcase.Web.Utils;
+
+@{
+    string userPicture = ViewData.ContainsKey(Constants.UserPictureKey)
+        ? ViewData[Constants.UserPictureKey].ToString()
+        : null;
+    userPicture = string.IsNullOrEmpty(userPicture)
+        ? @"https://cdn.pixabay.com/photo/2020/03/31/19/20/dog-4988985__340.jpg"
+        : userPicture;
+
+    string userBG = ViewData.ContainsKey(Constants.UserBGKey)
+        ? ViewData[Constants.UserBGKey].ToString()
+        : null;
+    userBG = string.IsNullOrEmpty(userBG)
+        ? @"https://wallpapersmug.com/large/9f1f3a/dark-pink-ribbon-abstract.jpg"
+        : userBG;
+
+    string userFullName = ViewData.ContainsKey(Constants.UserFullNameKey)
+        ? ViewData[Constants.UserFullNameKey].ToString()
+        : null;
+    userFullName = string.IsNullOrEmpty(userFullName)
+        ? @"Corgo"
+        : userFullName;
+
+    string userTitle = ViewData.ContainsKey(Constants.UserTitleKey)
+        ? ViewData[Constants.UserTitleKey].ToString()
+        : null;
+    userTitle = string.IsNullOrEmpty(userTitle)
+        ? @"Your Portable Potato"
+        : userTitle;
+
+    string userBiography = ViewData.ContainsKey(Constants.UserBiographyKey)
+        ? ViewData[Constants.UserBiographyKey].ToString()
+        : null;
+    userBiography = string.IsNullOrEmpty(userBiography)
+        ? @"Sometimes I'm a potato, sometimes I am not. For more details check #LokiTheColorfulCorgi"
+        : userBiography;
+
+    List<(string, string, int)> userLinks = (ViewData.ContainsKey(Constants.UserLinksKey)
+        ? (ViewData[Constants.UserLinksKey] as List<(string, string, int)>)
+        : null)
+        ?? new List<(string, string, int)> { (@"More about me", @"https://alexpetrescu.net/", 1) };
+
+    ViewData["Title"] = $"About{userFullName}";
+}
+<div>
+    <table width="80%" height="90%" border="0" cellpadding="10">
+        <tbody>
+            <tr>
+                <td rowspan="3" class="colcenter" width="25%">
+                    <div>
+                        <img src="@userPicture" alt="" />
+                    </div>
+                </td>
+                <td width="75%">
+                    <p>
+                        Greetings, my name is <strong>@userFullName</strong> <br>
+                        and I am <em>@userTitle</em>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="colcenter">
+                    <p>
+                        @userBiography
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="colcenter">
+                    @{
+                        foreach ((string title, string link, _) in userLinks.OrderBy(x => x.Item3))
+                        {
+                            <a href="@link" class="btn btn-primary">@title</a>
+                            <br>
+                        }
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

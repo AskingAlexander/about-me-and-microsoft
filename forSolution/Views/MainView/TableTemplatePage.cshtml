@@ -1,0 +1,49 @@
+﻿@using Showcase.Web.Utils;
+
+@{
+    string pageTitle = ViewData.ContainsKey(Constants.PageTitleKey)
+        ? ViewData[Constants.PageTitleKey].ToString()
+        : null;
+    pageTitle = string.IsNullOrEmpty(pageTitle)
+        ? @"Template For Links"
+        : pageTitle;
+
+    string pageDescription = ViewData.ContainsKey(Constants.PageDescriptionKey)
+        ? ViewData[Constants.PageDescriptionKey].ToString()
+        : null;
+    pageDescription = string.IsNullOrEmpty(pageTitle)
+        ? @"Look at all this content, look at it"
+        : pageDescription;
+
+    ViewData["Title"] = pageTitle;
+
+    List<(string title, string description, string link, int order)> pageContent = (ViewData.ContainsKey(Constants.PageContentKey)
+        ? (ViewData[Constants.PageContentKey] as List<(string, string, string, int)>)
+        : null)
+        ?? new List<(string, string, string, int)> { (@"More about me", @"I have used all my text for this demo", @"https://alexpetrescu.net/", 1) };
+}
+
+<h2>@pageDescription</h2>
+
+<div>
+    <table width="80%" height="90%" cellpadding="10">
+        @{
+            foreach ((string title, string description, string link, _) in pageContent.OrderBy(x => x.order))
+            {
+                <tr>
+                    <td>
+                        @title
+                    </td>
+                    <td rowspan="2">
+                        @description
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="@link" class="btn btn-primary">Check it out!</a>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
